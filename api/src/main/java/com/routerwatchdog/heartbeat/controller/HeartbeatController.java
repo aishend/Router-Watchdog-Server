@@ -1,7 +1,7 @@
-package io.github.aishend.routerwatchdog.heartbeat.controller;
+package com.routerwatchdog.heartbeat.controller;
 
-import io.github.aishend.routerwatchdog.heartbeat.HeartbeatState;
-import io.github.aishend.routerwatchdog.heartbeat.dto.HeartbeatRequest;
+import com.routerwatchdog.heartbeat.HeartbeatState;
+import com.routerwatchdog.heartbeat.dto.HeartbeatRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
