@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:router_watchdog}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/router_watchdog}
     username: ${DB_USER:watchdog}
     password: ${DB_PASSWORD:watchdog}
 
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: ${SPRING_JPA_SHOW_SQL:false}
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10000}
