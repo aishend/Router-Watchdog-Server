@@ -1,0 +1,29 @@
+package com.leandro.routerwatchdog.heartbeat.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+
+public record HeartbeatRequest(
+        @NotBlank
+        String deviceId,
+
+        @NotNull
+        Boolean wifiConnected,
+
+        @NotNull
+        Boolean internetConnected,
+
+        @NotBlank
+        String ip,
+
+        @NotBlank
+        String gateway,
+
+        @Min(0)
+        int failures,
+
+        @Min(0)
+        long uptime
+) {
+}
