@@ -1,4 +1,4 @@
-package com.leandro.routerwatchdog;
+package io.github.aishend.routerwatchdog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

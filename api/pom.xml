@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.leandro</groupId>
+    <groupId>io.github.aishend</groupId>
     <artifactId>router-watchdog-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>router-watchdog-api</name>

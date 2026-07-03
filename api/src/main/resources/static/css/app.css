@@ -1,0 +1,122 @@
+:root {
+    color-scheme: light;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #17202a;
+    background: #f4f7fb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
+.page {
+    width: min(980px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 48px 0;
+
+    & .page__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    & .page__title {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    & .page__update {
+        min-width: 180px;
+        padding-top: 8px;
+        text-align: right;
+        font-size: 14px;
+        color: #596778;
+    }
+}
+
+.devices {
+    overflow-x: auto;
+    border: 1px solid #d8e0ea;
+    border-radius: 8px;
+    background: #ffffff;
+
+    & .devices__table {
+        width: 100%;
+        min-width: 520px;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 16px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e7edf4;
+        }
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #66758a;
+            background: #f8fafc;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+    }
+
+    & .devices__empty {
+        padding: 34px 18px;
+        text-align: center;
+        color: #66758a;
+    }
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    min-width: 72px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+
+    &.status--up {
+        color: #0f5132;
+        background: #d1e7dd;
+    }
+
+    &.status--down {
+        color: #842029;
+        background: #f8d7da;
+    }
+}
+
+@media (max-width: 640px) {
+    .page {
+        width: min(100% - 24px, 980px);
+        padding: 28px 0;
+
+        & .page__header {
+            display: block;
+        }
+
+        & .page__title {
+            font-size: 26px;
+        }
+
+        & .page__update {
+            min-width: 0;
+            margin-top: 10px;
+            text-align: left;
+        }
+    }
+}
