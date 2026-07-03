@@ -23,7 +23,7 @@ The application keeps heartbeat state in memory. Each device is identified by `d
 
 ```text
 api/
-  src/main/java/io/github/aishend/routerwatchdog/
+  src/main/java/com/routerwatchdog/
     heartbeat/
       controller/        REST endpoints
       dto/               API request models
@@ -73,8 +73,6 @@ Request body:
 ```json
 {
   "deviceId": "router-main",
-  "wifiConnected": true,
-  "internetConnected": true,
   "ip": "192.168.1.1",
   "gateway": "192.168.1.254",
   "failures": 0,
