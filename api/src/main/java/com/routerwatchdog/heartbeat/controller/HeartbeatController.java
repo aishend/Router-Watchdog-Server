@@ -5,6 +5,7 @@ import com.routerwatchdog.heartbeat.dto.HeartbeatRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.routerwatchdog.heartbeat.dto.HeartbeatResponse;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -22,7 +23,7 @@ public class HeartbeatController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Boolean>> receiveHeartbeat(
+    public ResponseEntity<HeartbeatResponse> receiveHeartbeat(
             @Valid @RequestBody HeartbeatRequest request) {
         System.out.println("Heartbeat received");
         System.out.println(request);
@@ -30,7 +31,7 @@ public class HeartbeatController {
         heartbeatState.save(request);
 
         return ResponseEntity.ok(
-                Map.of("success", true));
+        new HeartbeatResponse(true, "NONE"));
     }
 
     @GetMapping("/latest")
