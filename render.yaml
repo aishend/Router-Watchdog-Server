@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: router-watchdog-api
-    runtime: docker
-    rootDir: api
-    plan: free
