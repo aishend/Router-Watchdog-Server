@@ -7,7 +7,11 @@ import java.time.Instant;
 
 @Component
 public class HeartbeatState {
+    private final Instant serverStartedAt = Instant.now();
 
+    public Instant getServerStartedAt() {
+        return serverStartedAt;
+    }
     private HeartbeatRequest lastRequest;
     private Instant lastReceivedAt;
 

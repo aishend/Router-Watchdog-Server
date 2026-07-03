@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Router Watchdog</title>
+</head>
+<body>
+    <h1>Router Watchdog</h1>
+
+    <p>Status: <span id="status">Waiting...</span></p>
+    <p>Device: <span id="deviceId">Waiting...</span></p>
+    <p>Internet: <span id="internet">Waiting...</span></p>
+    <p>Wi-Fi: <span id="wifi">Waiting...</span></p>
+    <p>Last heartbeat: <span id="lastHeartbeat">Waiting...</span></p>
+
+    <script>
+        const pageLoadedAt = Date.now();
+
+        async function loadLatestHeartbeat() {
+            const response = await fetch("/api/v1/heartbeat/latest");
+            const data = await response.json();
+
+            if (!data.lastRequest) {
+                const secondsSincePageLoad = Math.floor((Date.now() - pageLoadedAt) / 1000);
+
+                if (secondsSincePageLoad >= 30) {
+                    document.getElementById("status").textContent = "DOWN";
+                } else {
+                    document.getElementById("status").textContent = "Waiting...";
+                }
+
+                return;
+            }
+
+            const heartbeat = data.lastRequest;
+
+            document.getElementById("status").textContent = data.deviceStatus;
+            document.getElementById("deviceId").textContent = heartbeat.deviceId;
+            document.getElementById("internet").textContent = heartbeat.internetConnected ? "OK" : "DOWN";
+            document.getElementById("wifi").textContent = heartbeat.wifiConnected ? "OK" : "DOWN";
+            document.getElementById("lastHeartbeat").textContent =
+                data.secondsSinceLastHeartbeat + " seconds ago";
+        }
+
+        loadLatestHeartbeat();
+        setInterval(loadLatestHeartbeat, 3000);
+    </script>
+</body>
+</html>
