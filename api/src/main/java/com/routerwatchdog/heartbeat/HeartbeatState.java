@@ -11,21 +11,20 @@ import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class HeartbeatState {
-    private final ConcurrentMap<String, DeviceHeartbeat> devices = new ConcurrentHashMap<>();
+        private final ConcurrentMap<String, DeviceHeartbeat> devices = new ConcurrentHashMap<>();
 
-    public void save(HeartbeatRequest request) {
-        devices.put(request.deviceId(), new DeviceHeartbeat(request, Instant.now()));
-    }
+        public void save(HeartbeatRequest request) {
+                devices.put(request.deviceId(), new DeviceHeartbeat(request, Instant.now()));
+        }
 
-    public Collection<DeviceHeartbeat> getDevices() {
-        return devices.values().stream()
-                .sorted(Comparator.comparing(device -> device.request().deviceId()))
-                .toList();
-    }
+        public Collection<DeviceHeartbeat> getDevices() {
+                return devices.values().stream()
+                                .sorted(Comparator.comparing(device -> device.request().deviceId()))
+                                .toList();
+        }
 
-    public record DeviceHeartbeat(
-            HeartbeatRequest request,
-            Instant lastReceivedAt
-    ) {
-    }
+        public record DeviceHeartbeat(
+                        HeartbeatRequest request,
+                        Instant lastReceivedAt) {
+        }
 }

@@ -22,10 +22,12 @@ public class CommandController {
             @Valid @RequestBody CommandRequest request) {
         commandQueue.queueCommand(deviceId, request.command());
 
+        PendingCommand command = commandQueue.queueCommand(deviceId, request.command());
+
         return ResponseEntity.ok(
                 Map.of(
                         "success", true,
                         "deviceId", deviceId,
-                        "command", request.command()));
+                        "command", command));
     }
 }

@@ -1,9 +1,8 @@
 package com.routerwatchdog.heartbeat.dto;
 
-import com.routerwatchdog.commands.CommandType;
+import com.routerwatchdog.commands.PendingCommand;
 
 public record HeartbeatResponse(
-        boolean success,
-        CommandType command
-) {
+                boolean success,
+                PendingCommand command) {
 }
