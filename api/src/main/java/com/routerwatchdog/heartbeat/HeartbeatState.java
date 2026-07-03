@@ -1,6 +1,6 @@
-package io.github.aishend.routerwatchdog.heartbeat;
+package com.routerwatchdog.heartbeat;
 
-import io.github.aishend.routerwatchdog.heartbeat.dto.HeartbeatRequest;
+import com.routerwatchdog.heartbeat.dto.HeartbeatRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;

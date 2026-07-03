@@ -1,4 +1,4 @@
-package io.github.aishend.routerwatchdog.heartbeat.dto;
+package com.routerwatchdog.heartbeat.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min;
