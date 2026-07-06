@@ -1,10 +1,10 @@
 package com.routerwatchdog.devices;
 
-import java.time.Instant;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "watchdog_devices")
@@ -20,6 +20,12 @@ public class WatchdogDeviceEntity {
     private Integer rssi;
     private long freeHeap;
     private String firmwareVersion;
+
+    private String displayName;
+    private String location;
+    private String notes;
+    private boolean enabled = true;
+
     private Instant firstSeenAt;
     private Instant lastReceivedAt;
 
@@ -35,6 +41,10 @@ public class WatchdogDeviceEntity {
             Integer rssi,
             long freeHeap,
             String firmwareVersion,
+            String displayName,
+            String location,
+            String notes,
+            boolean enabled,
             Instant firstSeenAt,
             Instant lastReceivedAt
     ) {
@@ -46,6 +56,10 @@ public class WatchdogDeviceEntity {
         this.rssi = rssi;
         this.freeHeap = freeHeap;
         this.firmwareVersion = firmwareVersion;
+        this.displayName = displayName;
+        this.location = location;
+        this.notes = notes;
+        this.enabled = enabled;
         this.firstSeenAt = firstSeenAt;
         this.lastReceivedAt = lastReceivedAt;
     }
@@ -82,6 +96,22 @@ public class WatchdogDeviceEntity {
         return firmwareVersion;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public Instant getFirstSeenAt() {
         return firstSeenAt;
     }
@@ -108,5 +138,17 @@ public class WatchdogDeviceEntity {
         this.freeHeap = freeHeap;
         this.firmwareVersion = firmwareVersion;
         this.lastReceivedAt = receivedAt;
+    }
+
+    public void updateMetadata(
+            String displayName,
+            String location,
+            String notes,
+            boolean enabled
+    ) {
+        this.displayName = displayName;
+        this.location = location;
+        this.notes = notes;
+        this.enabled = enabled;
     }
 }

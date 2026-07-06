@@ -1,5 +1,6 @@
 package com.routerwatchdog.devices;
 
+import com.routerwatchdog.devices.dto.UpdateDeviceMetadataRequest;
 import com.routerwatchdog.heartbeat.dto.HeartbeatRequest;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,10 @@ public class WatchdogDeviceService {
                         request.rssi(),
                         request.freeHeap(),
                         request.firmwareVersion(),
+                        request.deviceId(),
+                        null,
+                        null,
+                        true,
                         receivedAt,
                         receivedAt
                 ));
@@ -47,5 +52,23 @@ public class WatchdogDeviceService {
 
     public List<WatchdogDeviceEntity> getDevicesByArrivalOrder() {
         return watchdogDeviceRepository.findAllByOrderByFirstSeenAtAsc();
+    }
+
+    public WatchdogDeviceEntity updateMetadata(
+            String deviceId,
+            UpdateDeviceMetadataRequest request
+    ) {
+        WatchdogDeviceEntity device = watchdogDeviceRepository
+                .findById(deviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Device not found: " + deviceId));
+
+        device.updateMetadata(
+                request.displayName(),
+                request.location(),
+                request.notes(),
+                request.enabled()
+        );
+
+        return watchdogDeviceRepository.save(device);
     }
 }
