@@ -7,30 +7,66 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-    <main class="page">
-        <header class="page__header">
-            <h1 class="page__title">Router Watchdog</h1>
-            <div class="page__update">Page updated <span id="pageUpdatedAgo">now</span></div>
-        </header>
+<main class="page">
+    <header class="page__header">
+        <h1 class="page__title">Router Watchdog</h1>
+        <div class="page__update">Page updated <span id="pageUpdatedAgo">now</span></div>
+    </header>
 
-        <section class="devices">
+    <section class="panel">
+        <div class="panel__header">
+            <h2 class="panel__title">Devices</h2>
+        </div>
+
+        <div class="devices">
             <table class="devices__table">
                 <thead>
-                    <tr>
-                        <th>Device</th>
-                        <th>Status</th>
-                        <th>Last heartbeat</th>
-                    </tr>
+                <tr>
+                    <th>Device</th>
+                    <th>Status</th>
+                    <th>IP</th>
+                    <th>Gateway</th>
+                    <th>Failures</th>
+                    <th>Last heartbeat</th>
+                    <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody id="devicesTable">
-                    <tr>
-                        <td colspan="3" class="devices__empty">Waiting for devices...</td>
-                    </tr>
+                <tr>
+                    <td colspan="7" class="devices__empty">Waiting for devices...</td>
+                </tr>
                 </tbody>
             </table>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <script src="/js/app.js" defer></script>
+    <section class="panel">
+        <div class="panel__header">
+            <h2 class="panel__title">Commands</h2>
+        </div>
+
+        <div class="commands">
+            <table class="commands__table">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Command ID</th>
+                    <th>Created</th>
+                    <th>Delivered</th>
+                    <th>Completed</th>
+                </tr>
+                </thead>
+                <tbody id="commandsTable">
+                <tr>
+                    <td colspan="6" class="commands__empty">No commands yet...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="/js/app.js" defer></script>
 </body>
 </html>
