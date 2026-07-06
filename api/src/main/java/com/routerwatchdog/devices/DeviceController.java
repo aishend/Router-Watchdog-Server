@@ -1,7 +1,6 @@
 package com.routerwatchdog.devices;
 
 import com.routerwatchdog.devices.dto.DeviceResponse;
-import com.routerwatchdog.heartbeat.HeartbeatState;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,34 +12,34 @@ import java.util.Map;
 @RequestMapping("/api/v1/devices")
 public class DeviceController {
 
-    private final HeartbeatState heartbeatState;
+    private final WatchdogDeviceService watchdogDeviceService;
 
-    public DeviceController(HeartbeatState heartbeatState) {
-        this.heartbeatState = heartbeatState;
+    public DeviceController(WatchdogDeviceService watchdogDeviceService) {
+        this.watchdogDeviceService = watchdogDeviceService;
     }
 
     @GetMapping
     public ResponseEntity<?> getDevices() {
         Instant now = Instant.now();
 
-        var devices = heartbeatState.getDevices().stream()
+        var devices = watchdogDeviceService.getDevicesByArrivalOrder().stream()
                 .map(device -> {
                     long secondsSinceLastHeartbeat =
-                            Duration.between(device.lastReceivedAt(), now).toSeconds();
+                            Duration.between(device.getLastReceivedAt(), now).toSeconds();
 
                     boolean isDown = secondsSinceLastHeartbeat > 30;
 
                     return new DeviceResponse(
-                            device.request().deviceId(),
+                            device.getDeviceId(),
                             isDown ? "DOWN" : "UP",
-                            device.request().ip(),
-                            device.request().gateway(),
-                            device.request().failures(),
-                            device.request().uptime(),
-                            device.request().rssi(),
-                            device.request().freeHeap(),
-                            device.request().firmwareVersion(),
-                            device.lastReceivedAt(),
+                            device.getIp(),
+                            device.getGateway(),
+                            device.getFailures(),
+                            device.getUptime(),
+                            device.getRssi(),
+                            device.getFreeHeap(),
+                            device.getFirmwareVersion(),
+                            device.getLastReceivedAt(),
                             secondsSinceLastHeartbeat
                     );
                 })

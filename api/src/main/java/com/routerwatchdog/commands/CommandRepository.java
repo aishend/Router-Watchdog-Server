@@ -1,33 +1,64 @@
 package com.routerwatchdog.commands;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-@Component
+@Repository
 public class CommandRepository {
-    private final ConcurrentMap<String, PendingCommand> commandsById = new ConcurrentHashMap<>();
 
-    public void save(PendingCommand command) {
-        commandsById.put(command.id(), command);
+    private final JpaCommandRepository jpaCommandRepository;
+
+    public CommandRepository(JpaCommandRepository jpaCommandRepository) {
+        this.jpaCommandRepository = jpaCommandRepository;
+    }
+
+    public PendingCommand save(PendingCommand command) {
+        CommandEntity entity = toEntity(command);
+        CommandEntity savedEntity = jpaCommandRepository.save(entity);
+
+        return toDomain(savedEntity);
     }
 
     public PendingCommand findById(String commandId) {
-        return commandsById.get(commandId);
+        return jpaCommandRepository.findById(commandId)
+                .map(this::toDomain)
+                .orElse(null);
     }
 
     public PendingCommand update(PendingCommand command) {
-        commandsById.put(command.id(), command);
-        return command;
+        CommandEntity entity = toEntity(command);
+        CommandEntity savedEntity = jpaCommandRepository.save(entity);
+
+        return toDomain(savedEntity);
     }
 
     public Collection<PendingCommand> findAll() {
-        return commandsById.values().stream()
-                .sorted(Comparator.comparing(
-                        (PendingCommand command) -> command.createdAt()).reversed())
+        return jpaCommandRepository.findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(this::toDomain)
                 .toList();
+    }
+
+    private CommandEntity toEntity(PendingCommand command) {
+        return new CommandEntity(
+                command.id(),
+                command.type(),
+                command.status(),
+                command.createdAt(),
+                command.deliveredAt(),
+                command.completedAt()
+        );
+    }
+
+    private PendingCommand toDomain(CommandEntity entity) {
+        return new PendingCommand(
+                entity.getId(),
+                entity.getType(),
+                entity.getStatus(),
+                entity.getCreatedAt(),
+                entity.getDeliveredAt(),
+                entity.getCompletedAt()
+        );
     }
 }
