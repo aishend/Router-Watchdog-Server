@@ -1,26 +1,19 @@
 import type { Device } from "../../types/api";
+import { formatDuration } from "../../utils/formatDuration";
 
 type DeviceCardProps = {
   device: Device;
   onRebootRouter: (deviceId: string) => void;
   onEditDevice: (device: Device) => void;
+  onViewDetails: (device: Device) => void;
 };
 
-function formatUptime(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-  }
-
-  return `${minutes}m`;
-}
 
 export function DeviceCard({
   device,
   onRebootRouter,
   onEditDevice,
+  onViewDetails,
 }: DeviceCardProps) {
   const isUp = device.deviceStatus === "UP";
 
@@ -107,7 +100,7 @@ export function DeviceCard({
             Uptime
           </dt>
           <dd className="mt-1 font-bold text-slate-900">
-            {formatUptime(device.uptime)}
+            {formatDuration(device.uptime)}
           </dd>
         </div>
 
@@ -123,12 +116,20 @@ export function DeviceCard({
             Last heartbeat
           </dt>
           <dd className="mt-1 font-bold text-slate-900">
-            {device.secondsSinceLastHeartbeat}s ago
+            {formatDuration(device.secondsSinceLastHeartbeat)} ago
           </dd>
         </div>
       </dl>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <button
+          className="rounded-xl border border-slate-300 px-4 py-2.5 font-bold text-slate-700 hover:bg-slate-50"
+          type="button"
+          onClick={() => onViewDetails(device)}
+        >
+          Details
+        </button>
+
         <button
           className="rounded-xl border border-slate-300 px-4 py-2.5 font-bold text-slate-700 hover:bg-slate-50"
           type="button"

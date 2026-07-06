@@ -1,33 +1,28 @@
 import { useEffect, useState } from "react";
 
 import {
-  getCommands,
   getDevices,
   queueCommand,
   updateDeviceMetadata,
 } from "../../api/routerWatchdogApi";
-import { CommandTable } from "../../components/CommandTable";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { DeviceCard } from "../../components/DeviceCard";
 import { EditDeviceDialog } from "../../components/EditDeviceDialog";
-import type { Command, Device } from "../../types/api";
+import { DeviceDetailPage } from "../DeviceDetail";
+import type { Device } from "../../types/api";
 
 export function DashboardPage() {
   const [devices, setDevices] = useState<Device[]>([]);
-  const [commands, setCommands] = useState<Command[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [devicePendingReboot, setDevicePendingReboot] = useState<Device | null>(null);
   const [devicePendingEdit, setDevicePendingEdit] = useState<Device | null>(null);
+  const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
   async function loadDashboard() {
     try {
-      const [devicesResponse, commandsResponse] = await Promise.all([
-        getDevices(),
-        getCommands(),
-      ]);
+      const devicesResponse = await getDevices();
 
       setDevices(devicesResponse.devices);
-      setCommands(commandsResponse);
       setError(null);
     } catch {
       setError("Failed to load dashboard");
@@ -71,6 +66,15 @@ export function DashboardPage() {
 
   const onlineDevices = devices.filter((device) => device.deviceStatus === "UP").length;
 
+  if (selectedDevice) {
+    return (
+      <DeviceDetailPage
+        device={selectedDevice}
+        onBack={() => setSelectedDevice(null)}
+      />
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-10 text-slate-900">
       <div className="mx-auto max-w-6xl">
@@ -105,15 +109,11 @@ export function DashboardPage() {
                   device={device}
                   onRebootRouter={() => setDevicePendingReboot(device)}
                   onEditDevice={setDevicePendingEdit}
+                  onViewDetails={setSelectedDevice}
                 />
               ))}
             </div>
           )}
-        </section>
-
-        <section>
-          <h2 className="mb-4 text-xl font-bold">Commands</h2>
-          <CommandTable commands={commands} />
         </section>
       </div>
 

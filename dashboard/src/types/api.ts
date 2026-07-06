@@ -36,3 +36,18 @@ export type Command = {
   deliveredAt: string | null;
   completedAt: string | null;
 };
+
+export type NetworkClient = {
+  id: string;
+  watchdogDeviceId: string;
+  ip: string;
+  mac: string;
+  hostname: string | null;
+  vendor: string | null;
+  firstSeenAt: string;
+  lastSeenAt: string;
+};
+
+export type NetworkClientsResponse = {
+  clients: NetworkClient[];
+};

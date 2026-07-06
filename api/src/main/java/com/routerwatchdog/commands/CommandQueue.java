@@ -9,7 +9,10 @@ import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class CommandQueue {
-    private final ConcurrentMap<String, Queue<String>> queuedCommandIdsByDevice = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<String, Queue<String>> queuedCommandIdsByDevice =
+            new ConcurrentHashMap<>();
+
     private final CommandRepository commandRepository;
 
     public CommandQueue(CommandRepository commandRepository) {
@@ -17,43 +20,41 @@ public class CommandQueue {
     }
 
     public PendingCommand queueCommand(String deviceId, CommandType commandType) {
-        if (commandType == CommandType.NONE) {
-            return null;
-        }
+        PendingCommand command = PendingCommand.create(deviceId, commandType);
 
-        PendingCommand command = PendingCommand.create(commandType);
-
-        commandRepository.save(command);
+        PendingCommand savedCommand = commandRepository.save(command);
 
         queuedCommandIdsByDevice
                 .computeIfAbsent(deviceId, ignored -> new ConcurrentLinkedQueue<>())
-                .add(command.id());
+                .add(savedCommand.id());
 
-        return command;
+        return savedCommand;
     }
 
     public PendingCommand pollCommand(String deviceId) {
-        Queue<String> commandIds = queuedCommandIdsByDevice.get(deviceId);
+        Queue<String> queue = queuedCommandIdsByDevice.get(deviceId);
 
-        if (commandIds == null) {
+        if (queue == null) {
             return null;
         }
 
-        String commandId = commandIds.poll();
+        while (!queue.isEmpty()) {
+            String commandId = queue.poll();
+            PendingCommand command = commandRepository.findById(commandId);
 
-        if (commandId == null) {
-            return null;
+            if (command == null) {
+                continue;
+            }
+
+            if (command.status() != CommandStatus.QUEUED) {
+                continue;
+            }
+
+            PendingCommand deliveredCommand = command.markDelivered();
+            return commandRepository.update(deliveredCommand);
         }
 
-        PendingCommand command = commandRepository.findById(commandId);
-
-        if (command == null) {
-            return null;
-        }
-
-        PendingCommand deliveredCommand = command.markDelivered();
-
-        return commandRepository.update(deliveredCommand);
+        return null;
     }
 
     public PendingCommand completeCommand(String commandId) {

@@ -17,4 +17,9 @@ public class CommandQueryController {
     public ResponseEntity<?> getCommands() {
         return ResponseEntity.ok(commandRepository.findAll());
     }
+
+    @GetMapping("/{deviceId}")
+    public ResponseEntity<?> getCommandsByDeviceId(@PathVariable String deviceId) {
+        return ResponseEntity.ok(commandRepository.findAllByDeviceId(deviceId));
+    }
 }

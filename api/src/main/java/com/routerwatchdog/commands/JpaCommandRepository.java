@@ -7,4 +7,6 @@ import java.util.List;
 public interface JpaCommandRepository extends JpaRepository<CommandEntity, String> {
 
     List<CommandEntity> findAllByOrderByCreatedAtDesc();
+
+    List<CommandEntity> findAllByDeviceIdOrderByCreatedAtDesc(String deviceId);
 }

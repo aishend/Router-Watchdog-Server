@@ -1,4 +1,4 @@
-import type { Command, CommandType, Device, DevicesResponse } from "../types/api";
+import type { Command, CommandType, Device, DevicesResponse, NetworkClientsResponse } from "../types/api";
 
 type QueueCommandResponse = {
   success: boolean;
@@ -58,4 +58,21 @@ export function updateDeviceMetadata(
       body: JSON.stringify(metadata),
     },
   );
+}
+
+export function getNetworkClients(): Promise<NetworkClientsResponse> {
+  return request<NetworkClientsResponse>("/api/v1/network-clients");
+}
+
+
+export function getNetworkClientsByDevice(
+  deviceId: string,
+): Promise<NetworkClientsResponse> {
+  return request<NetworkClientsResponse>(
+    `/api/v1/network-clients/${encodeURIComponent(deviceId)}`,
+  );
+}
+
+export function getCommandsByDevice(deviceId: string): Promise<Command[]> {
+  return request<Command[]>(`/api/v1/commands/${encodeURIComponent(deviceId)}`);
 }

@@ -40,9 +40,17 @@ public class CommandRepository {
                 .toList();
     }
 
+    public Collection<PendingCommand> findAllByDeviceId(String deviceId) {
+        return jpaCommandRepository.findAllByDeviceIdOrderByCreatedAtDesc(deviceId)
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
     private CommandEntity toEntity(PendingCommand command) {
         return new CommandEntity(
                 command.id(),
+                command.deviceId(),
                 command.type(),
                 command.status(),
                 command.createdAt(),
@@ -54,6 +62,7 @@ public class CommandRepository {
     private PendingCommand toDomain(CommandEntity entity) {
         return new PendingCommand(
                 entity.getId(),
+                entity.getDeviceId(),
                 entity.getType(),
                 entity.getStatus(),
                 entity.getCreatedAt(),

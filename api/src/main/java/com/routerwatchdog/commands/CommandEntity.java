@@ -15,6 +15,8 @@ public class CommandEntity {
     @Id
     private String id;
 
+    private String deviceId;
+
     @Enumerated(EnumType.STRING)
     private CommandType type;
 
@@ -30,6 +32,7 @@ public class CommandEntity {
 
     public CommandEntity(
             String id,
+            String deviceId,
             CommandType type,
             CommandStatus status,
             Instant createdAt,
@@ -37,6 +40,7 @@ public class CommandEntity {
             Instant completedAt
     ) {
         this.id = id;
+        this.deviceId = deviceId;
         this.type = type;
         this.status = status;
         this.createdAt = createdAt;
@@ -46,6 +50,10 @@ public class CommandEntity {
 
     public String getId() {
         return id;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 
     public CommandType getType() {
@@ -66,20 +74,5 @@ public class CommandEntity {
 
     public Instant getCompletedAt() {
         return completedAt;
-    }
-
-    public void markDelivered() {
-        this.status = CommandStatus.DELIVERED;
-        this.deliveredAt = Instant.now();
-    }
-
-    public void markCompleted() {
-        this.status = CommandStatus.COMPLETED;
-        this.completedAt = Instant.now();
-    }
-
-    public void markFailed() {
-        this.status = CommandStatus.FAILED;
-        this.completedAt = Instant.now();
     }
 }
