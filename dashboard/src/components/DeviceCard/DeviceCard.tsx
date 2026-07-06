@@ -3,6 +3,7 @@ import type { Device } from "../../types/api";
 type DeviceCardProps = {
   device: Device;
   onRebootRouter: (deviceId: string) => void;
+  onEditDevice: (device: Device) => void;
 };
 
 function formatUptime(seconds: number): string {
@@ -16,7 +17,11 @@ function formatUptime(seconds: number): string {
   return `${minutes}m`;
 }
 
-export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
+export function DeviceCard({
+  device,
+  onRebootRouter,
+  onEditDevice,
+}: DeviceCardProps) {
   const isUp = device.deviceStatus === "UP";
 
   return (
@@ -76,7 +81,9 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
           <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Firmware
           </dt>
-          <dd className="mt-1 font-bold text-slate-900">{device.firmwareVersion}</dd>
+          <dd className="mt-1 font-bold text-slate-900">
+            {device.firmwareVersion}
+          </dd>
         </div>
 
         <div className="rounded-xl bg-slate-50 p-3">
@@ -99,7 +106,9 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
           <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Uptime
           </dt>
-          <dd className="mt-1 font-bold text-slate-900">{formatUptime(device.uptime)}</dd>
+          <dd className="mt-1 font-bold text-slate-900">
+            {formatUptime(device.uptime)}
+          </dd>
         </div>
 
         <div className="rounded-xl bg-slate-50 p-3">
@@ -119,14 +128,24 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
         </div>
       </dl>
 
-      <button
-        className="w-full rounded-xl bg-slate-900 px-4 py-2.5 font-bold text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-        type="button"
-        disabled={!device.enabled}
-        onClick={() => onRebootRouter(device.deviceId)}
-      >
-        Reboot router
-      </button>
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          className="rounded-xl border border-slate-300 px-4 py-2.5 font-bold text-slate-700 hover:bg-slate-50"
+          type="button"
+          onClick={() => onEditDevice(device)}
+        >
+          Edit
+        </button>
+
+        <button
+          className="rounded-xl bg-slate-900 px-4 py-2.5 font-bold text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+          type="button"
+          disabled={!device.enabled}
+          onClick={() => onRebootRouter(device.deviceId)}
+        >
+          Reboot
+        </button>
+      </div>
     </article>
   );
 }

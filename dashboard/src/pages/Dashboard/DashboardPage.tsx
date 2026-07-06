@@ -4,10 +4,12 @@ import {
   getCommands,
   getDevices,
   queueCommand,
+  updateDeviceMetadata,
 } from "../../api/routerWatchdogApi";
 import { CommandTable } from "../../components/CommandTable";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { DeviceCard } from "../../components/DeviceCard";
+import { EditDeviceDialog } from "../../components/EditDeviceDialog";
 import type { Command, Device } from "../../types/api";
 
 export function DashboardPage() {
@@ -15,6 +17,7 @@ export function DashboardPage() {
   const [commands, setCommands] = useState<Command[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [devicePendingReboot, setDevicePendingReboot] = useState<Device | null>(null);
+  const [devicePendingEdit, setDevicePendingEdit] = useState<Device | null>(null);
 
   async function loadDashboard() {
     try {
@@ -38,6 +41,21 @@ export function DashboardPage() {
 
     await queueCommand(devicePendingReboot.deviceId, "REBOOT_ROUTER");
     setDevicePendingReboot(null);
+    await loadDashboard();
+  }
+
+  async function saveDeviceMetadata(values: {
+    displayName: string;
+    location: string | null;
+    notes: string | null;
+    enabled: boolean;
+  }) {
+    if (!devicePendingEdit) {
+      return;
+    }
+
+    await updateDeviceMetadata(devicePendingEdit.deviceId, values);
+    setDevicePendingEdit(null);
     await loadDashboard();
   }
 
@@ -86,6 +104,7 @@ export function DashboardPage() {
                   key={device.deviceId}
                   device={device}
                   onRebootRouter={() => setDevicePendingReboot(device)}
+                  onEditDevice={setDevicePendingEdit}
                 />
               ))}
             </div>
@@ -109,6 +128,13 @@ export function DashboardPage() {
         confirmLabel="Reboot router"
         onConfirm={confirmRebootRouter}
         onCancel={() => setDevicePendingReboot(null)}
+      />
+
+      <EditDeviceDialog
+        open={devicePendingEdit !== null}
+        device={devicePendingEdit}
+        onSave={saveDeviceMetadata}
+        onCancel={() => setDevicePendingEdit(null)}
       />
     </main>
   );

@@ -1,4 +1,17 @@
-import type { Command, CommandType, DevicesResponse } from "../types/api";
+import type { Command, CommandType, Device, DevicesResponse } from "../types/api";
+
+type QueueCommandResponse = {
+  success: boolean;
+  deviceId: string;
+  command: Command;
+};
+
+export type UpdateDeviceMetadataRequest = {
+  displayName: string;
+  location: string | null;
+  notes: string | null;
+  enabled: boolean;
+};
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, options);
@@ -18,12 +31,31 @@ export function getCommands(): Promise<Command[]> {
   return request<Command[]>("/api/v1/commands");
 }
 
-export function queueCommand(deviceId: string, command: CommandType): Promise<Command> {
-  return request<Command>(`/api/v1/commands/${encodeURIComponent(deviceId)}`, {
+export function queueCommand(
+  deviceId: string,
+  command: CommandType,
+): Promise<QueueCommandResponse> {
+  return request<QueueCommandResponse>(`/api/v1/commands/${encodeURIComponent(deviceId)}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ command }),
   });
+}
+
+export function updateDeviceMetadata(
+  deviceId: string,
+  metadata: UpdateDeviceMetadataRequest,
+): Promise<Device> {
+  return request<Device>(
+    `/api/v1/devices/${encodeURIComponent(deviceId)}/metadata`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(metadata),
+    },
+  );
 }
