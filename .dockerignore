@@ -1,0 +1,10 @@
+.git
+.idea
+.vscode
+
+dashboard/node_modules
+dashboard/dist
+
+api/target
+
+**/*.log
