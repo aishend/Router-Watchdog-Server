@@ -26,7 +26,8 @@ public class CommandRepository {
 
     public Collection<PendingCommand> findAll() {
         return commandsById.values().stream()
-                .sorted(Comparator.comparing(PendingCommand::createdAt).reversed())
+                .sorted(Comparator.comparing(
+                        (PendingCommand command) -> command.createdAt()).reversed())
                 .toList();
     }
 }

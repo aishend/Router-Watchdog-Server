@@ -20,9 +20,11 @@ public class CommandController {
     public ResponseEntity<Map<String, Object>> queueCommand(
             @PathVariable String deviceId,
             @Valid @RequestBody CommandRequest request) {
-        commandQueue.queueCommand(deviceId, request.command());
-
         PendingCommand command = commandQueue.queueCommand(deviceId, request.command());
+
+        System.out.println("========== CREATE COMMAND ==========");
+        System.out.println(request);
+        System.out.println("Device: " + deviceId);
 
         return ResponseEntity.ok(
                 Map.of(
