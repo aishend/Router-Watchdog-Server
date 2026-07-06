@@ -16,6 +16,11 @@ echo "Building Spring application..."
 cd "$ROOT_DIR/api"
 ./mvnw clean package
 
+if [[ "${CI:-}" == "true" || "${RENDER:-}" == "true" ]]; then
+  echo "CI/Render environment detected. Skipping local run prompt."
+  exit 0
+fi
+
 echo ""
 read -r -p "Run locally now? [Y/n] " RUN_LOCALLY
 RUN_LOCALLY="${RUN_LOCALLY:-Y}"

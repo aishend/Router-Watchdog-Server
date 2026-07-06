@@ -4,9 +4,9 @@ server:
 
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/router_watchdog}
-    username: ${DATABASE_USERNAME:router_watchdog}
-    password: ${DATABASE_PASSWORD:router_watchdog}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/router_watchdog}
+    username: ${SPRING_DATASOURCE_USERNAME:router_watchdog}
+    password: ${SPRING_DATASOURCE_PASSWORD:router_watchdog}
     driver-class-name: org.postgresql.Driver
 
   jpa:
