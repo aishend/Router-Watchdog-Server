@@ -64,4 +64,17 @@ public class CommandQueue {
     public Collection<PendingCommand> getCommands() {
         return commandsById.values();
     }
+
+    public PendingCommand failCommand(String commandId) {
+        PendingCommand command = commandsById.get(commandId);
+
+        if (command == null) {
+            return null;
+        }
+
+        PendingCommand failedCommand = command.markFailed();
+        commandsById.put(commandId, failedCommand);
+
+        return failedCommand;
+    }
 }
