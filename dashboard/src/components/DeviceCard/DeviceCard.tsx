@@ -23,8 +23,17 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
     <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <header className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-lg font-bold text-slate-900">{device.deviceId}</h3>
-          <p className="font-mono text-sm text-slate-500">{device.ip}</p>
+          <h3 className="text-lg font-bold text-slate-900">
+            {device.displayName || device.deviceId}
+          </h3>
+
+          <p className="font-mono text-sm text-slate-500">{device.deviceId}</p>
+
+          {device.location && (
+            <p className="mt-1 text-sm font-medium text-slate-600">
+              {device.location}
+            </p>
+          )}
         </div>
 
         <span
@@ -38,7 +47,31 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
         </span>
       </header>
 
+      {device.notes && (
+        <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+          {device.notes}
+        </div>
+      )}
+
       <dl className="mb-5 grid grid-cols-2 gap-3">
+        <div className="rounded-xl bg-slate-50 p-3">
+          <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            IP
+          </dt>
+          <dd className="mt-1 font-mono text-sm font-bold text-slate-900">
+            {device.ip}
+          </dd>
+        </div>
+
+        <div className="rounded-xl bg-slate-50 p-3">
+          <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Gateway
+          </dt>
+          <dd className="mt-1 font-mono text-sm font-bold text-slate-900">
+            {device.gateway}
+          </dd>
+        </div>
+
         <div className="rounded-xl bg-slate-50 p-3">
           <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Firmware
@@ -87,8 +120,9 @@ export function DeviceCard({ device, onRebootRouter }: DeviceCardProps) {
       </dl>
 
       <button
-        className="w-full rounded-xl bg-slate-900 px-4 py-2.5 font-bold text-white hover:bg-slate-700"
+        className="w-full rounded-xl bg-slate-900 px-4 py-2.5 font-bold text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
         type="button"
+        disabled={!device.enabled}
         onClick={() => onRebootRouter(device.deviceId)}
       >
         Reboot router

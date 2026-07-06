@@ -2,6 +2,10 @@ export type DeviceStatus = "UP" | "DOWN";
 
 export type Device = {
   deviceId: string;
+  displayName: string;
+  location: string | null;
+  notes: string | null;
+  enabled: boolean;
   deviceStatus: DeviceStatus;
   ip: string;
   gateway: string;
@@ -10,6 +14,7 @@ export type Device = {
   rssi: number;
   freeHeap: number;
   firmwareVersion: string;
+  firstSeenAt: string;
   lastReceivedAt: string;
   secondsSinceLastHeartbeat: number;
 };
